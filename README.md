@@ -451,3 +451,187 @@ Today most LLMs are based on ideas that evolved from this research.
 
 Seq2Seq uses an Encoder LSTM to convert a sentence into a vector and a Decoder LSTM to generate another sentence from that vector.
 
+
+#Third Research Paper
+# Neural Machine Translation by Jointly Learning to Align and Translate
+
+## Paper Overview
+
+This research paper introduces an improved Neural Machine Translation (NMT) model that can translate sentences from one language to another using deep learning. The main contribution of the paper is the **Attention Mechanism**, which allows the model to focus on relevant parts of the input sentence while generating each word of the translation.
+
+The model was proposed by Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio and published at ICLR 2015.
+
+---
+
+## Problem with Earlier Models
+
+Earlier Neural Machine Translation models used the **Encoder–Decoder architecture**.
+
+Workflow:
+
+1. The **Encoder** reads the entire input sentence.
+2. It converts the whole sentence into a **single fixed-length vector**.
+3. The **Decoder** uses this vector to generate the translated sentence.
+
+Problem:
+
+* A single vector must contain all information of the sentence.
+* For **long sentences**, important information may be lost.
+* Translation quality drops as sentence length increases.
+
+---
+
+## Key Idea of the Paper
+
+The paper proposes a new architecture that **learns to align and translate at the same time**.
+
+Instead of compressing the whole sentence into one vector, the model:
+
+* Creates **multiple vectors (annotations)** for each word of the input sentence.
+* While generating each output word, the model **focuses on relevant input words**.
+
+This mechanism is called **Attention**.
+
+---
+
+## Architecture of the Proposed Model
+
+The system has three main components:
+
+### 1. Encoder (Bidirectional RNN)
+
+The encoder reads the input sentence and converts each word into a vector representation.
+
+A **Bidirectional RNN** is used:
+
+* Forward RNN reads the sentence left → right
+* Backward RNN reads the sentence right → left
+
+Both outputs are combined to create a representation for each word.
+
+Result:
+
+h1, h2, h3, ..., hT
+
+Each vector contains information about the surrounding context of that word.
+
+---
+
+### 2. Attention Mechanism (Alignment Model)
+
+When the decoder generates a word, it calculates **attention weights** for every input word.
+
+These weights indicate:
+
+"How important each input word is for predicting the next output word."
+
+The weights are normalized using a **softmax function**.
+
+Then a **context vector** is computed:
+
+context = weighted sum of encoder vectors
+
+This context vector tells the decoder which part of the sentence to focus on.
+
+---
+
+### 3. Decoder (RNN)
+
+The decoder generates the translated sentence one word at a time.
+
+At each step it uses:
+
+* previous output word
+* previous hidden state
+* attention-based context vector
+
+Using these, it predicts the next word in the translation.
+
+---
+
+## Why Attention is Important
+
+The attention mechanism solves the main limitation of earlier models.
+
+Advantages:
+
+1. Handles **long sentences better**.
+2. The model does not need to compress all information into one vector.
+3. The decoder can dynamically focus on relevant parts of the sentence.
+4. Provides **interpretable alignments** between source and target words.
+
+The alignment can be visualized as a heatmap showing which source words correspond to target words.
+
+---
+
+## Training Details
+
+Dataset used:
+
+* English → French translation dataset (WMT 2014)
+
+Model details:
+
+* RNN encoder–decoder architecture
+* Bidirectional encoder
+* Attention alignment network
+
+The model was trained using **Stochastic Gradient Descent with Adadelta optimizer**.
+
+---
+
+## Results
+
+The proposed model (called **RNNsearch**) significantly outperformed the traditional encoder–decoder model.
+
+Main findings:
+
+* Better BLEU scores
+* Much better performance on long sentences
+* Translation quality close to phrase-based machine translation systems
+
+---
+
+## Example Insight
+
+The attention model correctly aligns words between English and French sentences.
+
+For example:
+
+"European Economic Area"
+
+is translated as
+
+"zone économique européenne"
+
+The attention mechanism learns which words correspond to each other.
+
+---
+
+## Key Contributions of the Paper
+
+1. Introduced the **Attention Mechanism** for neural machine translation.
+2. Solved the **fixed-length vector bottleneck**.
+3. Enabled models to translate **long sentences more accurately**.
+4. Provided interpretable word alignments.
+
+This idea later became the foundation for modern NLP models including **Transformers and Large Language Models**.
+
+---
+
+## Conclusion
+
+This paper is one of the most important milestones in NLP research.
+
+By introducing attention, it significantly improved neural machine translation and influenced many later architectures such as:
+
+* Transformer
+* BERT
+* GPT
+* Modern LLM systems
+
+The core idea is simple:
+
+"Instead of remembering everything, focus on the important parts when needed."
+
+
